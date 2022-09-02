@@ -1,0 +1,39 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 62.5%;
+  user-select: none;
+}
+#input {
+  width: 75%;
+  height: 50px;
+  font-size: 3rem;
+  border-radius: 10px;
+}
+#subbmid {
+  width: 24%;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 3rem;
+}
+#root {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  font-size: 4rem;
+}
+#delete {
+  font-size: 2rem;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  color: #ccc;
+  font-weight: 600;
+}
+#delete:hover {
+  opacity: 0.5;
+}

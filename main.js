@@ -2,25 +2,39 @@ const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
 const app = (function () {
-  const cars = ["BMW"];
-  const showCar = $("#root");
-  const inputCar = $("#input");
-  const submitCar = $("#subbmid");
+  const lists = ["BMW"];
+  const showList = $("#root");
+  const inputList = $("#input");
+  const submitList = $("#subbmid");
+  var completecount = [];
   return {
-    add(car) {
-      cars.push(car);
+    add(list) {
+      lists.push(list);
     },
     del(index) {
-      cars.splice(index, 1);
+      lists.splice(index, 1);
     },
     show() {
-      const htmls = cars
-        .map(function (car, index) {
-          return `<li>${car} <button data-index="${index}" id="delete">X</button>
-        </li>`;
+      const htmls = lists
+        .map(function (list, index) {
+          return `<div class="todo-list">
+          <div class="${completecount
+            .map(function (value) {
+              if (index == value) {
+                return "complete";
+              }
+              return "";
+            })
+            .join("")} todo-comp"  id=${index}>
+            <i class="fa-solid fa-check"></i>
+            </div>
+        <li class="todo-item">${list}
+          <button  data-index="${index}" id="delete">X</button>
+        </li>
+        </div>`;
         })
         .join("");
-      showCar.innerHTML = htmls;
+      showList.innerHTML = htmls;
     },
     handeldelete(event) {
       const delIndex = event.target.closest("#delete");
@@ -32,27 +46,48 @@ const app = (function () {
     init() {
       document.addEventListener("keydown", (event) => {
         if (event.which === 13) {
-          const car = inputCar.value;
-          if (car !== "") {
-            this.add(car);
+          const list = inputList.value;
+          if (list !== "") {
+            this.add(list);
             this.show();
-            inputCar.value = null;
-            inputCar.focus();
+            inputList.value = null;
+            inputList.focus();
           } else {
-            inputCar.focus()
+            inputList.focus();
           }
         }
       });
-      submitCar.onclick = () => {
-        const car = inputCar.value;
-        if (car !== "") {
-          this.add(car);
+      submitList.onclick = () => {
+        const list = inputList.value;
+        if (list !== "") {
+          this.add(list);
           this.show();
-          inputCar.value = null;
-          inputCar.focus();
+          inputList.value = null;
+          inputList.focus();
+        } else {
+          inputList.focus();
         }
       };
-      showCar.onclick = this.handeldelete.bind(this);
+      const complete = $(".container");
+      complete.onclick = (e) => {
+        const ele = e.target.closest(".todo-comp");
+        if (ele) {
+          ele.classList.toggle("complete");
+          if (completecount.length == 0) {
+            completecount.push(ele.id);
+          }
+          if (completecount.length > 0) {
+            var hasCompleted = completecount.some((val, i) => val == ele.id ? i : "");
+            if (!hasCompleted) {
+              completecount.push(ele.id);
+            }
+            if (hasCompleted) {
+              completecount.splice(completecount.indexOf(e.target.id), 1);
+            }
+          }
+        }
+      };
+      showList.onclick = this.handeldelete.bind(this);
       this.show();
     },
   };
